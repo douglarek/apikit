@@ -1,11 +1,11 @@
-# Notify - A go library for meican notify.
+# Bronx - A go library for Open API.
 
 ## Install
 
 ```
-$ go get github.com/douglarek/notify
+$ go get github.com/douglarek/bronx
 ```
 
 ## License
 
-Licensed under the [MIT License](https://github.com/douglarek/notify/blob/master/LICENSE).
+Licensed under the [MIT License](https://github.com/douglarek/bronx/blob/master/LICENSE).

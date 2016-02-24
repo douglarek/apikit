@@ -2,7 +2,7 @@
 Package sms provides several sms services API access.
 
 Example:
-	c := sms.NewClient(&http.Client{})
+	s := sms.NewAlidayuService(&http.Client{Timeout: 5 * time.Second})
 	r := sms.AlidayuSmsRequest{}
 	r.AppKey = "21295145"
 	r.Format = "json"
@@ -17,9 +17,9 @@ Example:
 	r.SmsParam = `{"code":"1234","product":"美餐"}`
 	r.SmsTemplateCode = "SMS_4125072"
 	r.SmsType = "normal"
-	r.Sign = c.AlidayuService.Sign(r, "ecd2196357a59ada4fe4319d4b98bca", sms.MD5)
+	r.Sign = s.Sign(r, "ecd2196357a59ada4fe4319d4b98bca", sms.MD5)
 
-	s, err := c.AlidayuService.SendSms(&r)
-	fmt.Println(s, err)
+	resp, err := s.SendSms(&r)
+	fmt.Println(resp, err)
 */
 package sms

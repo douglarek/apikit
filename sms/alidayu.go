@@ -5,9 +5,11 @@ import (
 	"crypto/hmac"
 	"crypto/md5"
 	"fmt"
+	"net/http"
 	"reflect"
 	"sort"
 
+	"github.com/douglarek/bronx"
 	"github.com/fatih/structs"
 )
 
@@ -16,7 +18,13 @@ const AlidayuURL = "https://eco.taobao.com/router/rest"
 
 // AlidayuService handles communication with related methods of the Alidayu API.
 type AlidayuService struct {
-	client *Client
+	client *bronx.Client
+}
+
+// NewAlidayuService ...
+func NewAlidayuService(httpClient *http.Client, contentType ...string) *AlidayuService {
+	c := bronx.NewClient(httpClient, contentType...)
+	return &AlidayuService{client: c}
 }
 
 // AlidayuRequest ...
@@ -86,13 +94,13 @@ func (a *AlidayuService) Sign(s interface{}, secret, method string) string {
 
 func encrypt(s, secret []byte, method string) (h string) {
 	switch method {
-	case MD5:
+	case bronx.MD5:
 		d := make([]byte, 0, len(s)+2*len(secret))
 		d = append(d, secret...)
 		d = append(d, s...)
 		d = append(d, secret...)
 		h = fmt.Sprintf("%X", md5.Sum(d))
-	case HMAC:
+	case bronx.HMAC:
 		// TODO:
 		mac := hmac.New(md5.New, secret)
 		mac.Write(s)
