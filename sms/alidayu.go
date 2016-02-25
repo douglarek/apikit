@@ -6,7 +6,6 @@ import (
 	"crypto/md5"
 	"fmt"
 	"net/http"
-	"reflect"
 	"sort"
 
 	"github.com/douglarek/bronx"
@@ -14,7 +13,7 @@ import (
 )
 
 // AlidayuURL ...
-const AlidayuURL = "https://eco.taobao.com/router/rest"
+const alidayuURL = "https://eco.taobao.com/router/rest"
 
 // AlidayuService handles communication with related methods of the Alidayu API.
 type AlidayuService struct {
@@ -50,33 +49,10 @@ type AlidayuSmsRequest struct {
 	SmsTemplateCode string `json:"sms_template_code,omitempty" url:"sms_template_code" structs:"sms_template_code"`
 }
 
-func params(m0 map[string]interface{}) (m map[string]string) {
-	if m == nil {
-		m = make(map[string]string)
-	}
-
-	for k, v := range m0 {
-		val := reflect.ValueOf(v)
-		if k == "sign" || v == nil {
-			continue
-		}
-		switch val.Kind() {
-		case reflect.Map:
-			for k, v0 := range params(v.(map[string]interface{})) {
-				m[k] = v0
-			}
-		case reflect.String:
-			m[k] = v.(string)
-		default:
-			panic(fmt.Sprintf("unsupported type: %T", v))
-		}
-	}
-	return
-}
-
 // Sign signs an Alidayu request struct.
 func (a *AlidayuService) Sign(s interface{}, secret, method string) string {
-	m := params(structs.Map(s))
+	m := bronx.Params(structs.Map(s))
+	delete(m, "sign")
 	keys := make([]string, 0, len(m))
 	for k := range m {
 		keys = append(keys, k)
@@ -137,7 +113,7 @@ type AlidayuSmsResponse struct {
 
 // SendSms sends a sms.
 func (a *AlidayuService) SendSms(r *AlidayuSmsRequest) (*AlidayuSmsResponse, error) {
-	req, err := a.client.NewRequest("POST", AlidayuURL, r)
+	req, err := a.client.NewRequest("POST", alidayuURL, r)
 	if err != nil {
 		return nil, err
 	}

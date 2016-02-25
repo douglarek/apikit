@@ -3,9 +3,14 @@ package bronx
 import (
 	"bytes"
 	"encoding/json"
+	"encoding/xml"
+	"fmt"
 	"io"
+	"io/ioutil"
 	"net/http"
 	"net/url"
+	"reflect"
+	"strconv"
 	"strings"
 
 	"github.com/google/go-querystring/query"
@@ -15,6 +20,7 @@ import (
 const (
 	MediaJSON = "application/json;charset=utf-8"
 	MediaForm = "application/x-www-form-urlencoded;charset=utf-8"
+	MediaXML  = "application/xml;charset=utf-8"
 
 	HMAC = "hmac"
 	MD5  = "md5"
@@ -61,10 +67,18 @@ func (c *Client) NewRequest(method, urlStr string, body interface{}) (*http.Requ
 		f, _ := query.Values(body)
 		buf = strings.NewReader(f.Encode())
 		c.ContentType = MediaForm
+	case MediaXML:
+		if body != nil {
+			var b []byte
+			b, err := xml.Marshal(body)
+			if err != nil {
+				return nil, err
+			}
+			buf = bytes.NewBuffer(b)
+		}
 	default:
 		panic("unsupported content type!")
 	}
-
 	req, err := http.NewRequest(method, u.String(), buf)
 	if err != nil {
 		return nil, err
@@ -85,11 +99,48 @@ func (c *Client) Do(req *http.Request, v interface{}) (*http.Response, error) {
 		if w, ok := v.(io.Writer); ok {
 			io.Copy(w, resp.Body)
 		} else {
-			err = json.NewDecoder(resp.Body).Decode(v)
-			if err == io.EOF {
-				err = nil // ignore EOF errors caused by empty response body
+			var b []byte
+			b, err = ioutil.ReadAll(resp.Body)
+			if err == nil {
+				// TODO: if json decode failed, try xml. maybe should use json decode rather than unmarshal.
+				if err := json.Unmarshal(b, v); err == io.EOF {
+					err = nil
+				} else {
+					if err := xml.Unmarshal(b, v); err == io.EOF {
+						err = nil
+					}
+				}
 			}
 		}
 	}
 	return resp, err
+}
+
+// Params expands a nested map.
+func Params(m0 map[string]interface{}) (m map[string]string) {
+	if m == nil {
+		m = make(map[string]string)
+	}
+
+	for k, v := range m0 {
+		val := reflect.ValueOf(v)
+		if v == nil {
+			continue
+		}
+		switch val.Kind() {
+		case reflect.Map:
+			for k, v0 := range Params(v.(map[string]interface{})) {
+				m[k] = v0
+			}
+		case reflect.String:
+			if val.Len() != 0 {
+				m[k] = v.(string)
+			}
+		case reflect.Int:
+			m[k] = strconv.FormatInt(int64(v.(int)), 10)
+		default:
+			panic(fmt.Sprintf("unsupported type: %T", v))
+		}
+	}
+	return
 }
