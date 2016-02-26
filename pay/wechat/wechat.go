@@ -25,29 +25,53 @@ func New(httpClient *http.Client) *Wechat {
 	return &Wechat{client: c}
 }
 
+// Req ...
+type Req struct {
+	XMLName  xml.Name `xml:"xml"`
+	AppID    string   `xml:"appid" structs:"appid"`
+	MchID    string   `xml:"mch_id" structs:"mch_id"`
+	NonceStr string   `xml:"nonce_str" structs:"nonce_str"`
+	Sign     string   `xml:"sign" structs:"sign"`
+}
+
 // OrderReq ...
 type OrderReq struct {
-	XMLName        xml.Name `xml:"xml"`
-	AppID          string   `xml:"appid" structs:"appid"`
-	MchID          string   `xml:"mch_id" structs:"mch_id"`
-	NonceStr       string   `xml:"nonce_str" structs:"nonce_str"`
-	Sign           string   `xml:"sign" structs:"sign"`
-	Body           string   `xml:"body" structs:"body"`
-	OutTradeNo     string   `xml:"out_trade_no" structs:"out_trade_no"`
-	TotalFee       int      `xml:"total_fee" structs:"total_fee"`
-	SpbillCreateIP string   `xml:"spbill_create_ip" structs:"spbill_create_ip"`
-	NotifyURL      string   `xml:"notify_url" structs:"notify_url"`
-	TradeType      string   `xml:"trade_type" structs:"trade_type"`
+	Req
+	DeviceInfo     string `xml:"device_info" structs:"device_info"`
+	Body           string `xml:"body" structs:"body"`
+	Detail         string `xml:"detail" structs:"detail"`
+	Attach         string `xml:"attach" structs:"attach"`
+	OutTradeNo     string `xml:"out_trade_no" structs:"out_trade_no"`
+	FeeType        string `xml:"fee_type" structs:"fee_type"`
+	TotalFee       int    `xml:"total_fee" structs:"total_fee"`
+	SpbillCreateIP string `xml:"spbill_create_ip" structs:"spbill_create_ip"`
+	TimeStart      string `xml:"time_start" structs:"time_start"`
+	TimeExpire     string `xml:"time_expire" structs:"time_expire"`
+	GoodsTag       string `xml:"goods_tag" structs:"goods_tag"`
+	NotifyURL      string `xml:"notify_url" structs:"notify_url"`
+	TradeType      string `xml:"trade_type" structs:"trade_type"`
+	ProductID      string `xml:"product_id" structs:"product_id"`
+	LimitPay       string `xml:"limit_pay" structs:"limit_pay"`
+	OpenID         string `xml:"openid" structs:"openid"`
+}
+
+// Resp ...
+type Resp struct {
+	ReturnCode string `xml:"return_code"`
+	ReturnMsg  string `xml:"return_msg"`
 }
 
 // OrderResp ...
 type OrderResp struct {
-	XMLName    xml.Name `xml:"xml"`
-	ReturnCode string   `xml:"return_code"`
-	ReturnMsg  string   `xml:"return_msg"`
-	TradeType  string   `xml:"trade_type"`
-	PrepayID   string   `xml:"prepay_id"`
-	CodeURL    string   `xml:"code_url"`
+	Resp
+	Req
+	DeviceInfo string `xml:"device_info" structs:"device_info"`
+	ResultCode string `xml:"result_code"`
+	ErrCode    string `xml:"err_code"`
+	ErrCodeDes string `xml:"err_code_des"`
+	TradeType  string `xml:"trade_type"`
+	PrepayID   string `xml:"prepay_id"`
+	CodeURL    string `xml:"code_url"`
 }
 
 // Sign ...
