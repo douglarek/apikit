@@ -12,7 +12,10 @@ import (
 	"github.com/fatih/structs"
 )
 
-const orderURL = "https://api.mch.weixin.qq.com/pay/unifiedorder"
+const (
+	orderURL = "https://api.mch.weixin.qq.com/pay/unifiedorder"
+	queryURL = "https://api.mch.weixin.qq.com/pay/orderquery"
+)
 
 // Wechat ...
 type Wechat struct {
@@ -59,6 +62,9 @@ type OrderReq struct {
 type Resp struct {
 	ReturnCode string `xml:"return_code"`
 	ReturnMsg  string `xml:"return_msg"`
+	ResultCode string `xml:"result_code"`
+	ErrCode    string `xml:"err_code"`
+	ErrCodeDes string `xml:"err_code_des"`
 }
 
 // OrderResp ...
@@ -66,12 +72,40 @@ type OrderResp struct {
 	Resp
 	Req
 	DeviceInfo string `xml:"device_info" structs:"device_info"`
-	ResultCode string `xml:"result_code"`
-	ErrCode    string `xml:"err_code"`
-	ErrCodeDes string `xml:"err_code_des"`
 	TradeType  string `xml:"trade_type"`
 	PrepayID   string `xml:"prepay_id"`
 	CodeURL    string `xml:"code_url"`
+}
+
+// QueryReq ...
+type QueryReq struct {
+	Req
+	TransactionID string `xml:"transaction_id" structs:"transaction_id"`
+	OutTradeNo    string `xml:"out_trade_no" structs:"out_trade_no"`
+}
+
+// QueryResp ...
+type QueryResp struct {
+	Resp
+	Req
+	DeviceInfo  string `xml:"device_info"`
+	OpenID      string `xml:"openid"`
+	IsSubscribe string `xml:"is_subscribe"`
+	TradeType   string `xml:"trade_type"`
+	TradeState  string `xml:"trade_state" structs:"trade_state"`
+	BankType    string `xml:"bank_type"`
+	TotalFee    string `xml:"total_fee"`
+	FeeType     string `xml:"fee_type"`
+	CashFee     int    `xml:"cash_fee"`
+	CashFeeType string `xml:"cash_fee_type"`
+	CouponFee   int    `xml:"coupon_fee"`
+	CouponCount int    `xml:"coupon_count"`
+	// coupon_batch_id_$n, coupon_id_$n, coupon_fee_$n
+	TransactionID  string `xml:"transaction_id"`
+	OutTradeNo     string `xml:"out_trade_no"`
+	Attach         string `xml:"attach"`
+	TimeEnd        string `xml:"time_end"`
+	TradeStateDesc string `xml:"trade_state_desc"`
 }
 
 // Sign ...
@@ -100,6 +134,19 @@ func (w *Wechat) Order(r *OrderReq) (*OrderResp, error) {
 		return nil, err
 	}
 	res := new(OrderResp)
+	if _, err := w.client.Do(req, res); err != nil {
+		return nil, err
+	}
+	return res, nil
+}
+
+// Query ...
+func (w *Wechat) Query(r *QueryReq) (*QueryResp, error) {
+	req, err := w.client.NewRequest("POST", queryURL, r)
+	if err != nil {
+		return nil, err
+	}
+	res := new(QueryResp)
 	if _, err := w.client.Do(req, res); err != nil {
 		return nil, err
 	}
