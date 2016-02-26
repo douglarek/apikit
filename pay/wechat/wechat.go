@@ -31,10 +31,10 @@ func New(httpClient *http.Client) *Wechat {
 // Req ...
 type Req struct {
 	XMLName  xml.Name `xml:"xml"`
-	AppID    string   `xml:"appid" structs:"appid"`
-	MchID    string   `xml:"mch_id" structs:"mch_id"`
-	NonceStr string   `xml:"nonce_str" structs:"nonce_str"`
-	Sign     string   `xml:"sign" structs:"sign"`
+	AppID    string   `xml:"appid" structs:"appid" json:"appId"`
+	MchID    string   `xml:"mch_id" structs:"mch_id" json:"partnerId"`
+	NonceStr string   `xml:"nonce_str" structs:"nonce_str" json:"nonceStr"`
+	Sign     string   `xml:"sign" structs:"sign" json:"sign"`
 }
 
 // OrderReq ...
@@ -111,6 +111,14 @@ type QueryResp struct {
 // NotifyResp ...
 type NotifyResp struct {
 	QueryResp
+}
+
+// AppReq packages needed params for client.
+type AppReq struct {
+	Req
+	PrepayID  string `json:"prepayId"`
+	Package   string `json:"package"`
+	TimeStamp int64  `json:"timeStamp"`
 }
 
 // Sign ...
