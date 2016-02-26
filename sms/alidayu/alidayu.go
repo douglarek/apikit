@@ -1,4 +1,4 @@
-package sms
+package alidayu
 
 import (
 	"bytes"
@@ -12,22 +12,21 @@ import (
 	"github.com/fatih/structs"
 )
 
-// AlidayuURL ...
-const alidayuURL = "https://eco.taobao.com/router/rest"
+const url = "https://eco.taobao.com/router/rest"
 
-// AlidayuService handles communication with related methods of the Alidayu API.
-type AlidayuService struct {
+// Alidayu handles communication with related methods of the Alidayu API.
+type Alidayu struct {
 	client *bronx.Client
 }
 
-// NewAlidayuService ...
-func NewAlidayuService(httpClient *http.Client, contentType ...string) *AlidayuService {
+// New ...
+func New(httpClient *http.Client, contentType ...string) *Alidayu {
 	c := bronx.NewClient(httpClient, contentType...)
-	return &AlidayuService{client: c}
+	return &Alidayu{client: c}
 }
 
-// AlidayuRequest ...
-type AlidayuRequest struct {
+// Req ...
+type Req struct {
 	Method     string `json:"method,omitempty" url:"method" structs:"method"`
 	AppKey     string `json:"app_key,omitempty" url:"app_key" structs:"app_key"`
 	Timestamp  string `json:"timestamp,omitempty" url:"timestamp" structs:"timestamp"`
@@ -38,9 +37,9 @@ type AlidayuRequest struct {
 	Sign       string `json:"sign,omitempty" url:"sign" structs:"sign"`
 }
 
-// AlidayuSmsRequest ...
-type AlidayuSmsRequest struct {
-	AlidayuRequest
+// SmsReq ...
+type SmsReq struct {
+	Req
 	Extend          string `json:"extend,omitempty" url:"extend" structs:"extend"`
 	SmsType         string `json:"sms_type,omitempty" url:"sms_type" structs:"sms_type"`
 	SmsFreeSignName string `json:"sms_free_sign_name,omitempty" url:"sms_free_sign_name" structs:"sms_free_sign_name"`
@@ -50,7 +49,7 @@ type AlidayuSmsRequest struct {
 }
 
 // Sign signs an Alidayu request struct.
-func (a *AlidayuService) Sign(s interface{}, secret, method string) string {
+func (a *Alidayu) Sign(s interface{}, secret, method string) string {
 	m := bronx.Params(structs.Map(s))
 	delete(m, "sign")
 	keys := make([]string, 0, len(m))
@@ -87,8 +86,8 @@ func encrypt(s, secret []byte, method string) (h string) {
 	return h
 }
 
-// AlidayuResponse ...
-type AlidayuResponse struct {
+// Resp ...
+type Resp struct {
 	Result struct {
 		ErrorCode string `json:"err_code,omitempty"`
 		Model     string `json:"model,omitempty"`
@@ -97,27 +96,27 @@ type AlidayuResponse struct {
 	} `json:"result"`
 }
 
-// AlidayuErrorResponse ...
-type AlidayuErrorResponse struct {
+// ErrResp ...
+type ErrResp struct {
 	Code    int    `json:"code,omitempty"`
 	Msg     string `json:"msg,omitempty"`
 	SubCode string `json:"sub_code,omitempty"`
 	SubMsg  string `json:"sub_msg,omitempty"`
 }
 
-// AlidayuSmsResponse ...
-type AlidayuSmsResponse struct {
-	AlidayuResponse      `json:"alibaba_aliqin_fc_sms_num_send_response,omitempty"`
-	AlidayuErrorResponse `json:"error_response,omitempty"`
+// SmsResp ...
+type SmsResp struct {
+	Resp    `json:"alibaba_aliqin_fc_sms_num_send_response,omitempty"`
+	ErrResp `json:"error_response,omitempty"`
 }
 
 // SendSms sends a sms.
-func (a *AlidayuService) SendSms(r *AlidayuSmsRequest) (*AlidayuSmsResponse, error) {
-	req, err := a.client.NewRequest("POST", alidayuURL, r)
+func (a *Alidayu) SendSms(r *SmsReq) (*SmsResp, error) {
+	req, err := a.client.NewRequest("POST", url, r)
 	if err != nil {
 		return nil, err
 	}
-	res := new(AlidayuSmsResponse)
+	res := new(SmsResp)
 	if _, err := a.client.Do(req, res); err != nil {
 		return nil, err
 	}

@@ -1,4 +1,4 @@
-package pay
+package wechat
 
 import (
 	"bytes"
@@ -12,21 +12,21 @@ import (
 	"github.com/fatih/structs"
 )
 
-const wechatUnifiedorderURL = "https://api.mch.weixin.qq.com/pay/unifiedorder"
+const orderURL = "https://api.mch.weixin.qq.com/pay/unifiedorder"
 
-// WechatService ...
-type WechatService struct {
+// Wechat ...
+type Wechat struct {
 	client *bronx.Client
 }
 
-// NewWechatService ...
-func NewWechatService(httpClient *http.Client) *WechatService {
+// New makes a wechat ...
+func New(httpClient *http.Client) *Wechat {
 	c := bronx.NewClient(httpClient, bronx.MediaXML)
-	return &WechatService{client: c}
+	return &Wechat{client: c}
 }
 
-// WechatUnifiedorderReq ...
-type WechatUnifiedorderReq struct {
+// OrderReq ...
+type OrderReq struct {
 	XMLName        xml.Name `xml:"xml"`
 	AppID          string   `xml:"appid" structs:"appid"`
 	MchID          string   `xml:"mch_id" structs:"mch_id"`
@@ -40,8 +40,8 @@ type WechatUnifiedorderReq struct {
 	TradeType      string   `xml:"trade_type" structs:"trade_type"`
 }
 
-// WechatUnifiedorderResp ...
-type WechatUnifiedorderResp struct {
+// OrderResp ...
+type OrderResp struct {
 	XMLName    xml.Name `xml:"xml"`
 	ReturnCode string   `xml:"return_code"`
 	ReturnMsg  string   `xml:"return_msg"`
@@ -51,8 +51,8 @@ type WechatUnifiedorderResp struct {
 }
 
 // Sign ...
-func (s *WechatService) Sign(s0 interface{}, secret string) string {
-	m := bronx.Params(structs.Map(s0))
+func (w *Wechat) Sign(s interface{}, secret string) string {
+	m := bronx.Params(structs.Map(s))
 	delete(m, "sign")
 	keys := make([]string, 0, len(m))
 	for k := range m {
@@ -70,13 +70,13 @@ func (s *WechatService) Sign(s0 interface{}, secret string) string {
 }
 
 // Order ...
-func (s *WechatService) Order(r *WechatUnifiedorderReq) (*WechatUnifiedorderResp, error) {
-	req, err := s.client.NewRequest("POST", wechatUnifiedorderURL, r)
+func (w *Wechat) Order(r *OrderReq) (*OrderResp, error) {
+	req, err := w.client.NewRequest("POST", orderURL, r)
 	if err != nil {
 		return nil, err
 	}
-	res := new(WechatUnifiedorderResp)
-	if _, err := s.client.Do(req, res); err != nil {
+	res := new(OrderResp)
+	if _, err := w.client.Do(req, res); err != nil {
 		return nil, err
 	}
 	return res, nil

@@ -2,8 +2,8 @@
 Package pay provides several pay services API access.
 
 Example:
-	s := pay.NewWechatService(&http.Client{})
-	r := pay.WechatUnifiedorderReq{}
+	s := wechat.New(&http.Client{})
+	r := wechat.OrderReq{}
 	r.AppID = ""
 	r.MchID = ""
 	rand.Seed(time.Now().UnixNano())

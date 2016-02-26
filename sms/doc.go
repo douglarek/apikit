@@ -2,8 +2,8 @@
 Package sms provides several sms services API access.
 
 Example:
-	s := sms.NewAlidayuService(&http.Client{Timeout: 5 * time.Second})
-	r := sms.AlidayuSmsRequest{}
+	s := alidayu.New(&http.Client{Timeout: 5 * time.Second})
+	r := alidayu.SmsReq{}
 	r.AppKey = "21295145"
 	r.Format = "json"
 	r.Method = "alibaba.aliqin.fc.sms.num.send"
