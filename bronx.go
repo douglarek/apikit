@@ -6,10 +6,10 @@ import (
 	"encoding/xml"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"net/http"
 	"net/url"
 	"reflect"
+	"regexp"
 	"strconv"
 	"strings"
 
@@ -99,16 +99,13 @@ func (c *Client) Do(req *http.Request, v interface{}) (*http.Response, error) {
 		if w, ok := v.(io.Writer); ok {
 			io.Copy(w, resp.Body)
 		} else {
-			var b []byte
-			b, err = ioutil.ReadAll(resp.Body)
-			if err == nil {
-				// TODO: if json decode failed, try xml. maybe should use json decode rather than unmarshal.
-				if err := json.Unmarshal(b, v); err == io.EOF {
+			if r, _ := regexp.MatchString("(plain|xml|xhtml)", resp.Header.Get("Content-Type")); r {
+				if err := xml.NewDecoder(resp.Body).Decode(v); err == io.EOF {
 					err = nil
-				} else {
-					if err := xml.Unmarshal(b, v); err == io.EOF {
-						err = nil
-					}
+				}
+			} else {
+				if err := json.NewDecoder(resp.Body).Decode(v); err == io.EOF {
+					err = nil
 				}
 			}
 		}
