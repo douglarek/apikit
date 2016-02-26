@@ -108,6 +108,11 @@ type QueryResp struct {
 	TradeStateDesc string `xml:"trade_state_desc"`
 }
 
+// NotifyResp ...
+type NotifyResp struct {
+	QueryResp
+}
+
 // Sign ...
 func (w *Wechat) Sign(s interface{}, secret string) string {
 	m := bronx.Params(structs.Map(s))
