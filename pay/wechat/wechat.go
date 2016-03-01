@@ -60,11 +60,11 @@ type OrderReq struct {
 
 // Resp ...
 type Resp struct {
-	ReturnCode string `xml:"return_code"`
-	ReturnMsg  string `xml:"return_msg"`
-	ResultCode string `xml:"result_code"`
-	ErrCode    string `xml:"err_code"`
-	ErrCodeDes string `xml:"err_code_des"`
+	ReturnCode string `xml:"return_code" json:"returnCode"`
+	ReturnMsg  string `xml:"return_msg" json:"returnMsg"`
+	ResultCode string `xml:"result_code" json:"resultCode"`
+	ErrCode    string `xml:"err_code" json:"errCode"`
+	ErrCodeDes string `xml:"err_code_des" json:"errCodeDes"`
 }
 
 // OrderResp ...
@@ -88,24 +88,24 @@ type QueryReq struct {
 type QueryResp struct {
 	Resp
 	Req
-	DeviceInfo  string `xml:"device_info"`
-	OpenID      string `xml:"openid"`
-	IsSubscribe string `xml:"is_subscribe"`
-	TradeType   string `xml:"trade_type"`
-	TradeState  string `xml:"trade_state" structs:"trade_state"`
-	BankType    string `xml:"bank_type"`
-	TotalFee    string `xml:"total_fee"`
-	FeeType     string `xml:"fee_type"`
-	CashFee     int    `xml:"cash_fee"`
-	CashFeeType string `xml:"cash_fee_type"`
-	CouponFee   int    `xml:"coupon_fee"`
-	CouponCount int    `xml:"coupon_count"`
+	DeviceInfo  string `xml:"device_info" json:"deviceInfo"`
+	OpenID      string `xml:"openid" json:"openId"`
+	IsSubscribe string `xml:"is_subscribe" json:"isSubscribe"`
+	TradeType   string `xml:"trade_type" json:"tradeType"`
+	TradeState  string `xml:"trade_state" json:"tradeState"`
+	BankType    string `xml:"bank_type" json:"bankType"`
+	TotalFee    string `xml:"total_fee" json:"totalFee"`
+	FeeType     string `xml:"fee_type" json:"feeType"`
+	CashFee     int    `xml:"cash_fee" json:"cashFee"`
+	CashFeeType string `xml:"cash_fee_type" json:"cashFeeType"`
+	CouponFee   int    `xml:"coupon_fee" json:"couponFee"`
+	CouponCount int    `xml:"coupon_count" json:"couponCount"`
 	// coupon_batch_id_$n, coupon_id_$n, coupon_fee_$n
-	TransactionID  string `xml:"transaction_id"`
-	OutTradeNo     string `xml:"out_trade_no"`
-	Attach         string `xml:"attach"`
-	TimeEnd        string `xml:"time_end"`
-	TradeStateDesc string `xml:"trade_state_desc"`
+	TransactionID  string `xml:"transaction_id" json:"transactionId"`
+	OutTradeNo     string `xml:"out_trade_no" json:"outTradeNo"`
+	Attach         string `xml:"attach" json:"attach"`
+	TimeEnd        string `xml:"time_end" json:"timeEnd"`
+	TradeStateDesc string `xml:"trade_state_desc" json:"tradeStateDesc"`
 }
 
 // NotifyResp ...
