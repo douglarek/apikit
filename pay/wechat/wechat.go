@@ -118,7 +118,7 @@ type AppReq struct {
 	Req
 	PrepayID  string `json:"prepayId"`
 	Package   string `json:"package"`
-	TimeStamp int64  `json:"timeStamp"`
+	TimeStamp string `json:"timeStamp"`
 }
 
 // Sign ...
