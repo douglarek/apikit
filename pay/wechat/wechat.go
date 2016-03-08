@@ -30,7 +30,7 @@ func New(httpClient *http.Client) *Wechat {
 
 // Req ...
 type Req struct {
-	XMLName  xml.Name `xml:"xml"`
+	XMLName  xml.Name `xml:"xml" json:"-"`
 	AppID    string   `xml:"appid" structs:"appid" json:"appId"`
 	MchID    string   `xml:"mch_id" structs:"mch_id" json:"partnerId"`
 	NonceStr string   `xml:"nonce_str" structs:"nonce_str" json:"nonceStr"`
