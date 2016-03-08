@@ -108,13 +108,13 @@ type QueryResp struct {
 	TradeStateDesc string `xml:"trade_state_desc" json:"tradeStateDesc"`
 }
 
-// NotifyResp ...
-type NotifyResp struct {
+// NotifyReq ...
+type NotifyReq struct {
 	QueryResp
 }
 
-// NotifyReq ...
-type NotifyReq struct {
+// NotifyResp ...
+type NotifyResp struct {
 	XMLName    xml.Name `xml:"xml"`
 	ReturnCode string   `xml:"return_code"`
 	ReturnMsg  string   `xml:"return_msg"`
