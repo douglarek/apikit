@@ -113,6 +113,13 @@ type NotifyResp struct {
 	QueryResp
 }
 
+// NotifyReq ...
+type NotifyReq struct {
+	XMLName    xml.Name `xml:"xml"`
+	ReturnCode string   `xml:"return_code"`
+	ReturnMsg  string   `xml:"return_msg"`
+}
+
 // AppReq packages needed params for client.
 type AppReq struct {
 	Req
