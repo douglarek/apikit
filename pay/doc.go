@@ -17,5 +17,20 @@ Example:
 	r.Sign = s.Sign(r, "")
 	resp, err := s.Order(&r)
 	fmt.Printf("%#v %s\n", resp, err)
+
+	s := ali.New(&http.Client{})
+	r := ali.OrderReq{}
+	r.Service = "create_direct_pay_by_user"
+	r.Partner = ""
+	r.InputCharset = "utf-8"
+	r.SignType = "MD5"
+	r.NotifyURL = "http://127.0.0.1"
+	r.OutTradeNo = strconv.FormatInt(time.Now().UnixNano(), 10)
+	r.Subject = "Test"
+	r.PaymentType = "1"
+	r.TotalFee = "0.01"
+	r.SellerEmail = ""
+	r.Sign = ss.Sign(s, "")
+	fmt.Println(s.PayStr(r))
 */
 package pay
