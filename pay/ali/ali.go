@@ -107,7 +107,7 @@ func (a *Ali) Sign(s interface{}, secretKey []byte) (b []byte) {
 }
 
 // Verify for RSA sign.
-func (a *Ali) Verify(publicKey, sign []byte, resp *OrderResp) error {
+func (a *Ali) Verify(publicKey, sign []byte, req *NotifyReq) error {
 	p, _ := pem.Decode(publicKey)
 	if p == nil {
 		panic("Public key broken!")
@@ -117,7 +117,7 @@ func (a *Ali) Verify(publicKey, sign []byte, resp *OrderResp) error {
 		panic(err)
 	}
 	h := crypto.Hash.New(crypto.SHA1)
-	m := bronx.Params(structs.Map(resp))
+	m := bronx.Params(structs.Map(req))
 	b := sortedParams(m)
 	h.Write(b.Bytes())
 	sum := h.Sum(nil)
@@ -149,8 +149,8 @@ func (a *Ali) PayURL(s interface{}) string {
 	return u.String()
 }
 
-// OrderResp ...
-type OrderResp struct {
+// NotifyReq ...
+type NotifyReq struct {
 	NotifyTime       string `structs:"notify_time" form:"notify_time" json:"notifyTime"`
 	NotifyType       string `structs:"notify_type" form:"notify_type" json:"notifyType"`
 	NotifyID         string `structs:"notify_id" form:"notify_id" json:"notifyId"`
