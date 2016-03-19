@@ -30,7 +30,7 @@ type Ali struct {
 	client *bronx.Client
 }
 
-// New makes a wechat ...
+// New makes an ali ...
 func New(httpClient *http.Client) *Ali {
 	c := bronx.NewClient(httpClient)
 	return &Ali{client: c}
