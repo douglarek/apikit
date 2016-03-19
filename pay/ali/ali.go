@@ -2,7 +2,12 @@ package ali
 
 import (
 	"bytes"
-	"crypto/md5"
+	"crypto"
+	"crypto/rand"
+	"crypto/rsa"
+	"crypto/x509"
+	"encoding/base64"
+	"encoding/pem"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -13,6 +18,12 @@ import (
 )
 
 const orderURL = "https://mapi.alipay.com/gateway.do"
+
+// sign methods
+const (
+	MD5 = "MD5"
+	RSA = "RSA"
+)
 
 // Ali ...
 type Ali struct {
@@ -49,8 +60,9 @@ type OrderReq struct {
 }
 
 // Sign ...
-func (a *Ali) Sign(s interface{}, secret string) string {
+func (a *Ali) Sign(s interface{}, secretKey []byte) (b []byte) {
 	m := bronx.Params(structs.Map(s))
+	st := m["sign_type"]
 	delete(m, "sign")
 	delete(m, "sign_type")
 	keys := make([]string, 0, len(m))
@@ -60,23 +72,61 @@ func (a *Ali) Sign(s interface{}, secret string) string {
 	sort.Strings(keys)
 
 	var buf bytes.Buffer
-	for _, k := range keys {
+	for i, k := range keys {
+		if i > 0 {
+			buf.WriteString("&")
+		}
 		buf.WriteString(fmt.Sprintf("%s=%s", k, m[k]))
-		buf.WriteString("&")
 	}
-	buf.Truncate(buf.Len() - 1)
-	buf.WriteString(secret)
-	return fmt.Sprintf("%x", md5.Sum(buf.Bytes()))
+
+	switch st {
+	case RSA:
+		p, _ := pem.Decode([]byte(secretKey))
+		if p == nil {
+			panic("Secret key broken!")
+		}
+		key, err := x509.ParsePKCS8PrivateKey(p.Bytes)
+		if err != nil {
+			panic(err)
+		}
+		h := crypto.Hash.New(crypto.SHA1)
+		h.Write(buf.Bytes())
+		sum := h.Sum(nil)
+		sig, _ := rsa.SignPKCS1v15(rand.Reader, key.(*rsa.PrivateKey), crypto.SHA1, sum)
+		return []byte(base64.StdEncoding.EncodeToString(sig))
+	case MD5:
+		buf.WriteString(string(secretKey))
+		h := crypto.Hash.New(crypto.MD5)
+		h.Write(buf.Bytes())
+		return h.Sum(nil)
+	}
+	return
 }
 
-// PayStr ...
-func (a *Ali) PayStr(s interface{}) string {
-	m := bronx.Params(structs.Map(s))
-	p := url.Values{}
-	for k := range m {
-		p.Add(k, m[k])
+// Verify for RSA sign.
+func Verify(publicKey, message, sign []byte) error {
+	p, _ := pem.Decode(publicKey)
+	if p == nil {
+		panic("Public key broken!")
 	}
-	return p.Encode()
+	pub, err := x509.ParsePKIXPublicKey(p.Bytes)
+	if err != nil {
+		panic(err)
+	}
+	h := crypto.Hash.New(crypto.SHA1)
+	h.Write(message)
+	sum := h.Sum(nil)
+	return rsa.VerifyPKCS1v15(pub.(*rsa.PublicKey), crypto.SHA1, sum, sign)
+}
+
+// EncodedQuery ...
+func (a *Ali) EncodedQuery(s interface{}) []byte {
+	var buf bytes.Buffer
+	for k, v := range bronx.Params(structs.Map(s)) {
+		buf.WriteString(fmt.Sprintf("%s=%q&", k, url.QueryEscape(v)))
+	}
+	buf.Truncate(buf.Len() - 1)
+	return buf.Bytes()
 }
 
 // PayURL ...
@@ -85,6 +135,11 @@ func (a *Ali) PayURL(s interface{}) string {
 	if err != nil {
 		panic(err)
 	}
-	u.RawQuery = a.PayStr(s)
+	m := bronx.Params(structs.Map(s))
+	p := url.Values{}
+	for k := range m {
+		p.Add(k, m[k])
+	}
+	u.RawQuery = p.Encode()
 	return u.String()
 }
