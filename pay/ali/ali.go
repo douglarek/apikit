@@ -38,25 +38,25 @@ func New(httpClient *http.Client) *Ali {
 
 // Req ...
 type Req struct {
-	Service      string `structs:"service"`
-	Partner      string `structs:"partner"`
-	InputCharset string `structs:"_input_charset"`
-	SignType     string `structs:"sign_type"`
-	Sign         string `structs:"sign"`
-	NotifyURL    string `structs:"notify_url"`
-	ReturnURL    string `structs:"return_url"`
+	Service      string `structs:"service" json:"service"`
+	Partner      string `structs:"partner" json:"partner"`
+	InputCharset string `structs:"_input_charset" json:"inputCharset"`
+	SignType     string `structs:"sign_type" json:"signType"`
+	Sign         string `structs:"sign" json:"sign"`
+	NotifyURL    string `structs:"notify_url" json:"notifyUrl"`
+	ReturnURL    string `structs:"return_url" json:"returnUrl"`
 }
 
 // OrderReq ...
 type OrderReq struct {
 	Req
-	OutTradeNo        string `structs:"out_trade_no"`
-	Subject           string `structs:"subject"`
-	PaymentType       string `structs:"payment_type"`
-	TotalFee          string `structs:"total_fee"`
-	SellerID          string `structs:"seller_id"`
-	SellerEmail       string `structs:"seller_email"`
-	SellerAccountName string `structs:"seller_account_name"`
+	OutTradeNo        string `structs:"out_trade_no" json:"outTradeNo"`
+	Subject           string `structs:"subject" json:"subject"`
+	PaymentType       string `structs:"payment_type" json:"paymentType"`
+	TotalFee          string `structs:"total_fee" json:"totalFee"`
+	SellerID          string `structs:"seller_id" json:"sellerId"`
+	SellerEmail       string `structs:"seller_email" json:"sellerEmail"`
+	SellerAccountName string `structs:"seller_account_name" json:"sellerAccountName"`
 }
 
 // Sign ...
@@ -142,4 +142,36 @@ func (a *Ali) PayURL(s interface{}) string {
 	}
 	u.RawQuery = p.Encode()
 	return u.String()
+}
+
+// OrderResp ...
+type OrderResp struct {
+	NotifyTime       string `structs:"notify_time" form:"notify_time" json:"notifyTime"`
+	NotifyType       string `structs:"notify_type" form:"notify_type" json:"notifyType"`
+	NotifyID         string `structs:"notify_id" form:"notify_id" json:"notifyId"`
+	SignType         string `structs:"sign_type" form:"sign_type" json:"signType"`
+	Sign             string `structs:"sign" form:"sign" json:"sign"`
+	OutTradeNo       string `structs:"out_trade_no" form:"out_trade_no" json:"outTradeNo"`
+	Subject          string `structs:"subject" form:"subject" json:"subject"`
+	PaymentType      string `structs:"payment_type" form:"payment_type" json:"paymentType"`
+	TradeNo          string `structs:"trade_no" form:"trade_no" json:"tradeNo"`
+	TradeStatus      string `structs:"trade_status" form:"trade_status" json:"tradeStatus"`
+	GmtCreate        string `structs:"gmt_create" form:"gmt_create" json:"gmtCreate"`
+	GmtPayment       string `structs:"gmt_payment" form:"gmt_payment" json:"gmtPayment"`
+	GmtClose         string `structs:"gmt_close" form:"gmt_close" json:"gmtClose"`
+	RefundStatus     string `structs:"refund_status" form:"refund_status" json:"refundStatus"`
+	GmtRefund        string `structs:"gmt_refund" form:"gmt_refund" json:"gmtRefund"`
+	SellerEmail      string `structs:"seller_email" form:"seller_email" json:"sellerEmail"`
+	BuyerEmail       string `structs:"buyer_email" form:"buyer_email" json:"buyerEmail"`
+	SellerID         string `structs:"seller_id" form:"seller_id" json:"sellerId"`
+	BuyerID          string `structs:"buyer_id" form:"buyer_id" json:"buyerId"`
+	Price            string `structs:"price" form:"price" json:"price"`
+	TotalFee         string `structs:"total_fee" form:"total_fee" json:"totalFee"`
+	Quantity         string `structs:"quantity" form:"quantity" json:"quantity"`
+	Body             string `structs:"body" form:"body" json:"body"`
+	Discount         string `structs:"discount" form:"discount" json:"discount"`
+	IsTotalFeeAdjust string `structs:"is_total_fee_adjust" form:"is_total_fee_adjust" json:"isTotalFeeAdjust"`
+	UseCoupon        string `structs:"use_coupon" form:"use_coupon" json:"useCoupon"`
+	ExtraCommonParam string `structs:"extra_common_param" form:"extra_common_param" json:"extraCommonParam"`
+	BusinessScene    string `structs:"business_scene" form:"business_scene" json:"businessScene"`
 }
