@@ -21,9 +21,6 @@ const (
 	MediaJSON = "application/json;charset=utf-8"
 	MediaForm = "application/x-www-form-urlencoded;charset=utf-8"
 	MediaXML  = "application/xml;charset=utf-8"
-
-	HMAC = "hmac"
-	MD5  = "md5"
 )
 
 // A Client manages communication with API.

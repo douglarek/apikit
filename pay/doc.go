@@ -30,7 +30,7 @@ Example:
 	r.PaymentType = "1"
 	r.TotalFee = "0.01"
 	r.SellerEmail = ""
-	r.Sign = ss.Sign(s, "")
-	fmt.Println(s.PayStr(r))
+	r.Sign = string(s.Sign(r, []byte(``)))
+	fmt.Println(s.PayURL(r))
 */
 package pay

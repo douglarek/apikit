@@ -14,6 +14,12 @@ import (
 
 const url = "https://eco.taobao.com/router/rest"
 
+//
+const (
+	HMAC = "hmac"
+	MD5  = "md5"
+)
+
 // Alidayu handles communication with related methods of the Alidayu API.
 type Alidayu struct {
 	client *bronx.Client
@@ -69,13 +75,13 @@ func (a *Alidayu) Sign(s interface{}, secret, method string) string {
 
 func encrypt(s, secret []byte, method string) (h string) {
 	switch method {
-	case bronx.MD5:
+	case MD5:
 		d := make([]byte, 0, len(s)+2*len(secret))
 		d = append(d, secret...)
 		d = append(d, s...)
 		d = append(d, secret...)
 		h = fmt.Sprintf("%X", md5.Sum(d))
-	case bronx.HMAC:
+	case HMAC:
 		// TODO:
 		mac := hmac.New(md5.New, secret)
 		mac.Write(s)
