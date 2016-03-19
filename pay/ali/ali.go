@@ -59,10 +59,7 @@ type OrderReq struct {
 	SellerAccountName string `structs:"seller_account_name" json:"sellerAccountName"`
 }
 
-// Sign ...
-func (a *Ali) Sign(s interface{}, secretKey []byte) (b []byte) {
-	m := bronx.Params(structs.Map(s))
-	st := m["sign_type"]
+func sortedParams(m map[string]string) bytes.Buffer {
 	delete(m, "sign")
 	delete(m, "sign_type")
 	keys := make([]string, 0, len(m))
@@ -78,7 +75,13 @@ func (a *Ali) Sign(s interface{}, secretKey []byte) (b []byte) {
 		}
 		buf.WriteString(fmt.Sprintf("%s=%s", k, m[k]))
 	}
+	return buf
+}
 
+// Sign ...
+func (a *Ali) Sign(s interface{}, secretKey []byte) (b []byte) {
+	m := bronx.Params(structs.Map(s))
+	st, buf := m["sign_type"], sortedParams(m)
 	switch st {
 	case RSA:
 		p, _ := pem.Decode([]byte(secretKey))
@@ -104,7 +107,7 @@ func (a *Ali) Sign(s interface{}, secretKey []byte) (b []byte) {
 }
 
 // Verify for RSA sign.
-func Verify(publicKey, message, sign []byte) error {
+func Verify(publicKey, sign []byte, resp *OrderResp) error {
 	p, _ := pem.Decode(publicKey)
 	if p == nil {
 		panic("Public key broken!")
@@ -114,7 +117,9 @@ func Verify(publicKey, message, sign []byte) error {
 		panic(err)
 	}
 	h := crypto.Hash.New(crypto.SHA1)
-	h.Write(message)
+	m := bronx.Params(structs.Map(resp))
+	b := sortedParams(m)
+	h.Write(b.Bytes())
 	sum := h.Sum(nil)
 	return rsa.VerifyPKCS1v15(pub.(*rsa.PublicKey), crypto.SHA1, sum, sign)
 }
