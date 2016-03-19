@@ -107,7 +107,7 @@ func (a *Ali) Sign(s interface{}, secretKey []byte) (b []byte) {
 }
 
 // Verify for RSA sign.
-func Verify(publicKey, sign []byte, resp *OrderResp) error {
+func (a *Ali) Verify(publicKey, sign []byte, resp *OrderResp) error {
 	p, _ := pem.Decode(publicKey)
 	if p == nil {
 		panic("Public key broken!")
