@@ -12,6 +12,7 @@ import (
 	"net/http"
 	"net/url"
 	"sort"
+	"strings"
 
 	"github.com/douglarek/bronx"
 	"github.com/fatih/structs"
@@ -57,11 +58,11 @@ type OrderReq struct {
 	SellerID          string `structs:"seller_id" json:"sellerId"`
 	SellerEmail       string `structs:"seller_email" json:"sellerEmail"`
 	SellerAccountName string `structs:"seller_account_name" json:"sellerAccountName"`
+	ItBPay            string `structs:"it_b_pay" json:"itBPay"`
+	Body              string `structs:"body" json:"body"`
 }
 
 func sortedParams(m map[string]string) bytes.Buffer {
-	delete(m, "sign")
-	delete(m, "sign_type")
 	keys := make([]string, 0, len(m))
 	for k := range m {
 		keys = append(keys, k)
@@ -73,7 +74,7 @@ func sortedParams(m map[string]string) bytes.Buffer {
 		if i > 0 {
 			buf.WriteString("&")
 		}
-		buf.WriteString(fmt.Sprintf("%s=%s", k, m[k]))
+		buf.WriteString(fmt.Sprintf("%s=%q", k, m[k]))
 	}
 	return buf
 }
@@ -81,7 +82,10 @@ func sortedParams(m map[string]string) bytes.Buffer {
 // Sign ...
 func (a *Ali) Sign(s interface{}, secretKey []byte) (b []byte) {
 	m := bronx.Params(structs.Map(s))
-	st, buf := m["sign_type"], sortedParams(m)
+	st := m["sign_type"]
+	delete(m, "sign")
+	delete(m, "sign_type")
+	buf := sortedParams(m)
 	switch st {
 	case RSA:
 		p, _ := pem.Decode([]byte(secretKey))
@@ -100,7 +104,7 @@ func (a *Ali) Sign(s interface{}, secretKey []byte) (b []byte) {
 	case MD5:
 		buf.WriteString(string(secretKey))
 		h := crypto.Hash.New(crypto.MD5)
-		h.Write(buf.Bytes())
+		h.Write([]byte(strings.Replace(buf.String(), `"`, "", -1)))
 		return h.Sum(nil)
 	}
 	return
@@ -126,11 +130,9 @@ func (a *Ali) Verify(publicKey, sign []byte, req *NotifyReq) error {
 
 // EncodedQuery ...
 func (a *Ali) EncodedQuery(s interface{}) []byte {
-	var buf bytes.Buffer
-	for k, v := range bronx.Params(structs.Map(s)) {
-		buf.WriteString(fmt.Sprintf("%s=%q&", k, url.QueryEscape(v)))
-	}
-	buf.Truncate(buf.Len() - 1)
+	m := bronx.Params(structs.Map(s))
+	m["sign"] = url.QueryEscape(m["sign"])
+	buf := sortedParams(m)
 	return buf.Bytes()
 }
 
