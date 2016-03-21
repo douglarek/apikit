@@ -12,7 +12,6 @@ import (
 	"net/http"
 	"net/url"
 	"sort"
-	"strings"
 
 	"github.com/douglarek/bronx"
 	"github.com/fatih/structs"
@@ -79,6 +78,10 @@ func sortedParams(m map[string]string) bytes.Buffer {
 	return buf
 }
 
+func removeQuote(b []byte) []byte {
+	return bytes.Replace(b, []byte(`"`), []byte(``), -1)
+}
+
 // Sign ...
 func (a *Ali) Sign(s interface{}, secretKey []byte) (b []byte) {
 	m := bronx.Params(structs.Map(s))
@@ -104,7 +107,7 @@ func (a *Ali) Sign(s interface{}, secretKey []byte) (b []byte) {
 	case MD5:
 		buf.WriteString(string(secretKey))
 		h := crypto.Hash.New(crypto.MD5)
-		h.Write([]byte(strings.Replace(buf.String(), `"`, "", -1)))
+		h.Write(removeQuote(buf.Bytes()))
 		return h.Sum(nil)
 	}
 	return
@@ -123,7 +126,7 @@ func (a *Ali) Verify(publicKey, sign []byte, req *NotifyReq) error {
 	h := crypto.Hash.New(crypto.SHA1)
 	m := bronx.Params(structs.Map(req))
 	b := sortedParams(m)
-	h.Write(b.Bytes())
+	h.Write(removeQuote(b.Bytes()))
 	sum := h.Sum(nil)
 	return rsa.VerifyPKCS1v15(pub.(*rsa.PublicKey), crypto.SHA1, sum, sign)
 }
