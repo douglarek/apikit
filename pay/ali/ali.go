@@ -7,6 +7,7 @@ import (
 	"crypto/rsa"
 	"crypto/x509"
 	"encoding/base64"
+	"encoding/json"
 	"encoding/pem"
 	"fmt"
 	"io/ioutil"
@@ -209,4 +210,19 @@ type NotifyReq struct {
 	UseCoupon        string `structs:"use_coupon" form:"use_coupon" json:"use_coupon"`
 	ExtraCommonParam string `structs:"extra_common_param" form:"extra_common_param" json:"extra_common_param"`
 	BusinessScene    string `structs:"business_scene" form:"business_scene" json:"business_scene"`
+}
+
+// DecodeNotify ...
+func DecodeNotify(b []byte) *NotifyReq {
+	str, _ := url.QueryUnescape(string(b))
+	m := map[string]string{}
+	for _, v := range strings.Split(str, "&") {
+		val := strings.Split(v, "=")
+		m[val[0]] = val[1]
+	}
+	req := NotifyReq{}
+	if js, err := json.Marshal(m); err == nil {
+		json.Unmarshal(js, &req)
+	}
+	return &req
 }
