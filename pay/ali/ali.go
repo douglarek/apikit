@@ -82,13 +82,20 @@ func removeQuote(b []byte) []byte {
 	return bytes.Replace(b, []byte(`"`), []byte(``), -1)
 }
 
+func removeKeys(m map[string]string, keys ...string) map[string]string {
+	for _, k := range keys {
+		if _, ok := m[k]; ok {
+			delete(m, k)
+		}
+	}
+	return m
+}
+
 // Sign ...
 func (a *Ali) Sign(s interface{}, secretKey []byte) (b []byte) {
 	m := bronx.Params(structs.Map(s))
 	st := m["sign_type"]
-	delete(m, "sign")
-	delete(m, "sign_type")
-	buf := sortedParams(m)
+	buf := sortedParams(removeKeys(m, "sign", "sign_type"))
 	switch st {
 	case RSA:
 		p, _ := pem.Decode([]byte(secretKey))
@@ -125,7 +132,7 @@ func (a *Ali) Verify(publicKey, sign []byte, req *NotifyReq) error {
 	}
 	h := crypto.Hash.New(crypto.SHA1)
 	m := bronx.Params(structs.Map(req))
-	b := sortedParams(m)
+	b := sortedParams(removeKeys(m, "sign", "sign_type"))
 	h.Write(removeQuote(b.Bytes()))
 	sum := h.Sum(nil)
 	return rsa.VerifyPKCS1v15(pub.(*rsa.PublicKey), crypto.SHA1, sum, sign)
