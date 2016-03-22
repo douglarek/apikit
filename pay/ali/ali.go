@@ -181,32 +181,32 @@ func (a *Ali) PayURL(s interface{}) string {
 
 // NotifyReq ...
 type NotifyReq struct {
-	NotifyTime       string `structs:"notify_time" form:"notify_time" json:"notifyTime"`
-	NotifyType       string `structs:"notify_type" form:"notify_type" json:"notifyType"`
-	NotifyID         string `structs:"notify_id" form:"notify_id" json:"notifyId"`
-	SignType         string `structs:"sign_type" form:"sign_type" json:"signType"`
+	NotifyTime       string `structs:"notify_time" form:"notify_time" json:"notify_time"`
+	NotifyType       string `structs:"notify_type" form:"notify_type" json:"notify_type"`
+	NotifyID         string `structs:"notify_id" form:"notify_id" json:"notify_id"`
+	SignType         string `structs:"sign_type" form:"sign_type" json:"sign_type"`
 	Sign             string `structs:"sign" form:"sign" json:"sign"`
-	OutTradeNo       string `structs:"out_trade_no" form:"out_trade_no" json:"outTradeNo"`
+	OutTradeNo       string `structs:"out_trade_no" form:"out_trade_no" json:"out_trade_no"`
 	Subject          string `structs:"subject" form:"subject" json:"subject"`
-	PaymentType      string `structs:"payment_type" form:"payment_type" json:"paymentType"`
-	TradeNo          string `structs:"trade_no" form:"trade_no" json:"tradeNo"`
-	TradeStatus      string `structs:"trade_status" form:"trade_status" json:"tradeStatus"`
-	GmtCreate        string `structs:"gmt_create" form:"gmt_create" json:"gmtCreate"`
-	GmtPayment       string `structs:"gmt_payment" form:"gmt_payment" json:"gmtPayment"`
-	GmtClose         string `structs:"gmt_close" form:"gmt_close" json:"gmtClose"`
-	RefundStatus     string `structs:"refund_status" form:"refund_status" json:"refundStatus"`
-	GmtRefund        string `structs:"gmt_refund" form:"gmt_refund" json:"gmtRefund"`
-	SellerEmail      string `structs:"seller_email" form:"seller_email" json:"sellerEmail"`
-	BuyerEmail       string `structs:"buyer_email" form:"buyer_email" json:"buyerEmail"`
-	SellerID         string `structs:"seller_id" form:"seller_id" json:"sellerId"`
-	BuyerID          string `structs:"buyer_id" form:"buyer_id" json:"buyerId"`
+	PaymentType      string `structs:"payment_type" form:"payment_type" json:"payment_type"`
+	TradeNo          string `structs:"trade_no" form:"trade_no" json:"trade_no"`
+	TradeStatus      string `structs:"trade_status" form:"trade_status" json:"trade_status"`
+	GmtCreate        string `structs:"gmt_create" form:"gmt_create" json:"gmt_create"`
+	GmtPayment       string `structs:"gmt_payment" form:"gmt_payment" json:"gmt_payment"`
+	GmtClose         string `structs:"gmt_close" form:"gmt_close" json:"gmt_close"`
+	RefundStatus     string `structs:"refund_status" form:"refund_status" json:"refund_status"`
+	GmtRefund        string `structs:"gmt_refund" form:"gmt_refund" json:"gmt_refund"`
+	SellerEmail      string `structs:"seller_email" form:"seller_email" json:"seller_email"`
+	BuyerEmail       string `structs:"buyer_email" form:"buyer_email" json:"buyer_email"`
+	SellerID         string `structs:"seller_id" form:"seller_id" json:"seller_id"`
+	BuyerID          string `structs:"buyer_id" form:"buyer_id" json:"buyer_id"`
 	Price            string `structs:"price" form:"price" json:"price"`
-	TotalFee         string `structs:"total_fee" form:"total_fee" json:"totalFee"`
+	TotalFee         string `structs:"total_fee" form:"total_fee" json:"total_fee"`
 	Quantity         string `structs:"quantity" form:"quantity" json:"quantity"`
 	Body             string `structs:"body" form:"body" json:"body"`
 	Discount         string `structs:"discount" form:"discount" json:"discount"`
-	IsTotalFeeAdjust string `structs:"is_total_fee_adjust" form:"is_total_fee_adjust" json:"isTotalFeeAdjust"`
-	UseCoupon        string `structs:"use_coupon" form:"use_coupon" json:"useCoupon"`
-	ExtraCommonParam string `structs:"extra_common_param" form:"extra_common_param" json:"extraCommonParam"`
-	BusinessScene    string `structs:"business_scene" form:"business_scene" json:"businessScene"`
+	IsTotalFeeAdjust string `structs:"is_total_fee_adjust" form:"is_total_fee_adjust" json:"is_total_fee_adjust"`
+	UseCoupon        string `structs:"use_coupon" form:"use_coupon" json:"use_coupon"`
+	ExtraCommonParam string `structs:"extra_common_param" form:"extra_common_param" json:"extra_common_param"`
+	BusinessScene    string `structs:"business_scene" form:"business_scene" json:"business_scene"`
 }
