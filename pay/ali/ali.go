@@ -9,9 +9,12 @@ import (
 	"encoding/base64"
 	"encoding/pem"
 	"fmt"
+	"io/ioutil"
 	"net/http"
 	"net/url"
+	"reflect"
 	"sort"
+	"strings"
 
 	"github.com/douglarek/bronx"
 	"github.com/fatih/structs"
@@ -118,6 +121,21 @@ func (a *Ali) Sign(s interface{}, secretKey []byte) (b []byte) {
 		return h.Sum(nil)
 	}
 	return
+}
+
+// VerifyResp ...
+func (a *Ali) VerifyNotify(partner, notifyID string) bool {
+	q := fmt.Sprintf("service=notify_verify&partner=%s&notify_id=%s", partner, notifyID)
+	resp, err := http.Get(strings.Join([]string{orderURL, "?", q}, ""))
+	if err != nil {
+		return false
+	}
+	defer resp.Body.Close()
+	b, err := ioutil.ReadAll(resp.Body)
+	if err != nil || !reflect.DeepEqual(b, []byte(`true`)) {
+		return false
+	}
+	return true
 }
 
 // Verify for RSA sign.
