@@ -131,7 +131,9 @@ func Params(m0 map[string]interface{}) (m map[string]string) {
 				m[k] = v.(string)
 			}
 		case reflect.Int:
-			m[k] = strconv.FormatInt(int64(v.(int)), 10)
+			if v != 0 {
+				m[k] = strconv.FormatInt(int64(v.(int)), 10)
+			}
 		default:
 			panic(fmt.Sprintf("unsupported type: %T", v))
 		}

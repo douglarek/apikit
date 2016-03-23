@@ -60,11 +60,11 @@ type OrderReq struct {
 
 // Resp ...
 type Resp struct {
-	ReturnCode string `xml:"return_code" json:"returnCode"`
-	ReturnMsg  string `xml:"return_msg" json:"returnMsg"`
-	ResultCode string `xml:"result_code" json:"resultCode"`
-	ErrCode    string `xml:"err_code" json:"errCode"`
-	ErrCodeDes string `xml:"err_code_des" json:"errCodeDes"`
+	ReturnCode string `structs:"return_code" xml:"return_code" json:"returnCode"`
+	ReturnMsg  string `structs:"return_msg" xml:"return_msg" json:"returnMsg"`
+	ResultCode string `structs:"result_code" xml:"result_code" json:"resultCode"`
+	ErrCode    string `structs:"err_code" xml:"err_code" json:"errCode"`
+	ErrCodeDes string `structs:"err_code_des" xml:"err_code_des" json:"errCodeDes"`
 }
 
 // OrderResp ...
@@ -88,24 +88,23 @@ type QueryReq struct {
 type QueryResp struct {
 	Resp
 	Req
-	DeviceInfo  string `xml:"device_info" json:"deviceInfo"`
-	OpenID      string `xml:"openid" json:"openId"`
-	IsSubscribe string `xml:"is_subscribe" json:"isSubscribe"`
-	TradeType   string `xml:"trade_type" json:"tradeType"`
-	TradeState  string `xml:"trade_state" json:"tradeState"`
-	BankType    string `xml:"bank_type" json:"bankType"`
-	TotalFee    string `xml:"total_fee" json:"totalFee"`
-	FeeType     string `xml:"fee_type" json:"feeType"`
-	CashFee     int    `xml:"cash_fee" json:"cashFee"`
-	CashFeeType string `xml:"cash_fee_type" json:"cashFeeType"`
-	CouponFee   int    `xml:"coupon_fee" json:"couponFee"`
-	CouponCount int    `xml:"coupon_count" json:"couponCount"`
-	// coupon_batch_id_$n, coupon_id_$n, coupon_fee_$n
-	TransactionID  string `xml:"transaction_id" json:"transactionId"`
-	OutTradeNo     string `xml:"out_trade_no" json:"outTradeNo"`
-	Attach         string `xml:"attach" json:"attach"`
-	TimeEnd        string `xml:"time_end" json:"timeEnd"`
-	TradeStateDesc string `xml:"trade_state_desc" json:"tradeStateDesc"`
+	DeviceInfo     string `structs:"device_info" xml:"device_info" json:"deviceInfo"`
+	OpenID         string `structs:"openid" xml:"openid" json:"openId"`
+	IsSubscribe    string `structs:"is_subscribe" xml:"is_subscribe" json:"isSubscribe"`
+	TradeType      string `structs:"trade_type" xml:"trade_type" json:"tradeType"`
+	TradeState     string `structs:"trade_state" xml:"trade_state" json:"tradeState"`
+	BankType       string `structs:"bank_type" xml:"bank_type" json:"bankType"`
+	TotalFee       string `structs:"total_fee" xml:"total_fee" json:"totalFee"`
+	FeeType        string `structs:"fee_type" xml:"fee_type" json:"feeType"`
+	CashFee        int    `structs:"cash_fee" xml:"cash_fee" json:"cashFee"`
+	CashFeeType    string `structs:"cash_fee_type" xml:"cash_fee_type" json:"cashFeeType"`
+	CouponFee      int    `structs:"coupon_fee" xml:"coupon_fee" json:"couponFee"`
+	CouponCount    int    `structs:"coupon_count" xml:"coupon_count" json:"couponCount"`
+	TransactionID  string `structs:"transaction_id" xml:"transaction_id" json:"transactionId"`
+	OutTradeNo     string `structs:"out_trade_no" xml:"out_trade_no" json:"outTradeNo"`
+	Attach         string `structs:"attach" xml:"attach" json:"attach"`
+	TimeEnd        string `structs:"time_end" xml:"time_end" json:"timeEnd"`
+	TradeStateDesc string `structs:"trade_state_desc" xml:"trade_state_desc" json:"tradeStateDesc"`
 }
 
 // NotifyReq ...
