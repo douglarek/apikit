@@ -122,10 +122,13 @@ type NotifyResp struct {
 
 // AppReq packages needed params for client.
 type AppReq struct {
-	Req
-	PrepayID  string `json:"prepayId"`
-	Package   string `json:"package"`
-	TimeStamp string `json:"timeStamp"`
+	AppID     string `structs:"appid" json:"appid"`
+	PartnerID string `structs:"partnerid" json:"partnerid"`
+	PrepayID  string `structs:"prepayid" json:"prepayid"`
+	Package   string `structs:"package" json:"package"`
+	NonceStr  string `structs:"noncestr" json:"noncestr"`
+	TimeStamp string `structs:"timestamp" json:"timestamp"`
+	Sign      string `structs:"sign" json:"sign"`
 }
 
 // Sign ...
