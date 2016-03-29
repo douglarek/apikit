@@ -124,7 +124,7 @@ func (a *Ali) Sign(s interface{}, secretKey []byte) (b []byte) {
 	return
 }
 
-// VerifyResp ...
+// VerifyNotify ...
 func (a *Ali) VerifyNotify(partner, notifyID string) bool {
 	q := fmt.Sprintf("service=notify_verify&partner=%s&notify_id=%s", partner, notifyID)
 	resp, err := http.Get(strings.Join([]string{orderURL, "?", q}, ""))
@@ -154,6 +154,7 @@ func (a *Ali) Verify(publicKey, sign []byte, req *NotifyReq) error {
 	b := sortedParams(removeKeys(m, "sign", "sign_type"))
 	h.Write(removeQuote(b.Bytes()))
 	sum := h.Sum(nil)
+	sign, _ = base64.StdEncoding.DecodeString(string(sign))
 	return rsa.VerifyPKCS1v15(pub.(*rsa.PublicKey), crypto.SHA1, sum, sign)
 }
 
