@@ -7,7 +7,6 @@ import (
 	"crypto/rsa"
 	"crypto/x509"
 	"encoding/base64"
-	"encoding/json"
 	"encoding/pem"
 	"fmt"
 	"io/ioutil"
@@ -124,8 +123,8 @@ func (a *Ali) Sign(s interface{}, secretKey []byte) (b []byte) {
 	return
 }
 
-// VerifyNotify ...
-func (a *Ali) VerifyNotify(partner, notifyID string) bool {
+// VerifyNotifyID ...
+func (a *Ali) VerifyNotifyID(partner, notifyID string) bool {
 	q := fmt.Sprintf("service=notify_verify&partner=%s&notify_id=%s", partner, notifyID)
 	resp, err := http.Get(strings.Join([]string{orderURL, "?", q}, ""))
 	if err != nil {
@@ -133,10 +132,7 @@ func (a *Ali) VerifyNotify(partner, notifyID string) bool {
 	}
 	defer resp.Body.Close()
 	b, err := ioutil.ReadAll(resp.Body)
-	if err != nil || !reflect.DeepEqual(b, []byte(`true`)) {
-		return false
-	}
-	return true
+	return err != nil && reflect.DeepEqual(b, []byte(`true`))
 }
 
 // Verify for RSA sign.
@@ -147,14 +143,16 @@ func (a *Ali) Verify(publicKey, sign []byte, req *NotifyReq) error {
 	}
 	pub, err := x509.ParsePKIXPublicKey(p.Bytes)
 	if err != nil {
-		panic(err)
+		return err
 	}
 	h := crypto.Hash.New(crypto.SHA1)
 	m := bronx.Params(structs.Map(req))
 	b := sortedParams(removeKeys(m, "sign", "sign_type"))
 	h.Write(removeQuote(b.Bytes()))
 	sum := h.Sum(nil)
-	sign, _ = base64.StdEncoding.DecodeString(string(sign))
+	if sign, err = base64.StdEncoding.DecodeString(string(sign)); err != nil {
+		return err
+	}
 	return rsa.VerifyPKCS1v15(pub.(*rsa.PublicKey), crypto.SHA1, sum, sign)
 }
 
@@ -211,19 +209,4 @@ type NotifyReq struct {
 	UseCoupon        string `structs:"use_coupon" form:"use_coupon" json:"use_coupon"`
 	ExtraCommonParam string `structs:"extra_common_param" form:"extra_common_param" json:"extra_common_param"`
 	BusinessScene    string `structs:"business_scene" form:"business_scene" json:"business_scene"`
-}
-
-// DecodeNotify ...
-func DecodeNotify(b []byte) *NotifyReq {
-	str, _ := url.QueryUnescape(string(b))
-	m := map[string]string{}
-	for _, v := range strings.Split(str, "&") {
-		val := strings.Split(v, "=")
-		m[val[0]] = val[1]
-	}
-	req := NotifyReq{}
-	if js, err := json.Marshal(m); err == nil {
-		json.Unmarshal(js, &req)
-	}
-	return &req
 }
