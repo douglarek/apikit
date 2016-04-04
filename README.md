@@ -1,6 +1,6 @@
 # Bronx - A go library for Open API.
 
-[![Build Status](https://travis-ci.org/douglarek/bronx.svg)](https://travis-ci.org/douglarek/bronx)
+[![GoDoc](http://img.shields.io/badge/go-documentation-blue.svg?style=flat-square)](https://godoc.org/github.com/douglarek/bronx) [![Build Status](http://img.shields.io/travis/douglarek/bronx.svg?style=flat-square)](https://travis-ci.org/douglarek/bronx)
 
 ## Install
 
