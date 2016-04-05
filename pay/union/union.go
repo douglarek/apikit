@@ -157,16 +157,16 @@ func Verify(s interface{}, publicKey, sign []byte) error {
 // NotifyReq ...
 type NotifyReq struct {
 	OrderResp
-	PayType            string `json:"payType"`
-	AccNo              string `json:"accNo"`
-	PayCardType        string `json:"payCardType"`
-	Reserved           string `json:"reserved"`
-	QueryID            string `json:"queryId"`
-	TraceNo            string `json:"traceNo"`
-	TraceTime          string `json:"traceTime"`
-	SettleDate         string `json:"settleDate"`
-	SettleCurrencyCode string `json:"settleCurrencyCode"`
-	SettleAmt          string `json:"settleAmt"`
-	PayCardNo          string `json:"payCardNo"`
-	PayCardIssueName   string `json:"payCardIssueName"`
+	PayType            string `structs:"payType" json:"payType"`
+	AccNo              string `structs:"accNo" json:"accNo"`
+	PayCardType        string `structs:"payCardType" json:"payCardType"`
+	Reserved           string `structs:"reserved"json:"reserved"`
+	QueryID            string `structs:"queryId" json:"queryId"`
+	TraceNo            string `structs:"traceNo" json:"traceNo"`
+	TraceTime          string `structs:"traceTime" json:"traceTime"`
+	SettleDate         string `structs:"settleDate" json:"settleDate"`
+	SettleCurrencyCode string `structs:"settleCurrencyCode" json:"settleCurrencyCode"`
+	SettleAmt          string `structs:"settleAmt" json:"settleAmt"`
+	PayCardNo          string `structs:"payCardNo" json:"payCardNo"`
+	PayCardIssueName   string `structs:"payCardIssueName" json:"payCardIssueName"`
 }
