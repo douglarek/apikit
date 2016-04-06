@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"net/http"
 	"sort"
+	"time"
 
 	"github.com/douglarek/bronx"
 	"github.com/fatih/structs"
@@ -52,6 +53,19 @@ type SmsReq struct {
 	SmsParam        string `json:"sms_param,omitempty" url:"sms_param" structs:"sms_param"`
 	RecNum          string `json:"rec_num,omitempty" url:"rec_num" structs:"rec_num"`
 	SmsTemplateCode string `json:"sms_template_code,omitempty" url:"sms_template_code" structs:"sms_template_code"`
+}
+
+// DefaultSmsReq ...
+func DefaultSmsReq() *SmsReq {
+	req := Req{
+		Format:     "json",
+		Method:     "alibaba.aliqin.fc.sms.num.send",
+		SignMethod: "md5",
+		Timestamp:  time.Now().UTC().Add(time.Duration(8 * time.Hour)).Format("2006-01-02 15:04:05"),
+		Version:    "2.0",
+		PartnerID:  "apidoc",
+	}
+	return &SmsReq{Req: req, Extend: "123456"}
 }
 
 // Sign signs an Alidayu request struct.
