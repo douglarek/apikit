@@ -1,6 +1,3 @@
-package: bitbucket.org/douglarek/notify
+package: github.com/douglarek/bronx
 import:
 - package: github.com/fatih/structs
-- package: github.com/google/go-querystring
-  subpackages:
-  - query

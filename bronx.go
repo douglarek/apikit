@@ -13,7 +13,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/google/go-querystring/query"
+	"github.com/fatih/structs"
 )
 
 //
@@ -61,8 +61,11 @@ func (c *Client) NewRequest(method, urlStr string, body interface{}) (*http.Requ
 			buf = bytes.NewBuffer(b)
 		}
 	case MediaForm, "":
-		f, _ := query.Values(body)
-		buf = strings.NewReader(f.Encode())
+		v := url.Values{}
+		for k, val := range Params(structs.Map(body)) {
+			v.Set(k, val)
+		}
+		buf = strings.NewReader(v.Encode())
 		c.ContentType = MediaForm
 	case MediaXML:
 		if body != nil {
