@@ -147,12 +147,9 @@ func listMultiple(r *MultipleDeviceReq, secret string) (*Resp, error) {
 	r.Sign = sign(r, prefix, secret)
 	resp, err := http.PostForm(u.String(), values(r))
 	if err != nil {
-		return nil, nil
+		return nil, err
 	}
-	resp0, err := unmarshalBody(resp.Body)
-	if err != nil {
-	}
-	return resp0, nil
+	return unmarshalBody(resp.Body)
 }
 
 // MultiPush ...
