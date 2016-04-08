@@ -1,7 +1,7 @@
 /*
 Package push provides several pay services API access.
 
-Example:
+Example (iOS only):
 	r := xg.SingleDeviceReq{}
 	r.AccessID = ""
 	localLoc, err := time.LoadLocation("Asia/Chongqing")
@@ -17,7 +17,6 @@ Example:
 	r.AccessID = ""
 	localLoc, _ := time.LoadLocation("Asia/Chongqing")
 	r.TimeStamp = strconv.FormatInt(time.Now().In(localLoc).Unix(), 10)
-	r.DeviceToken = ""
 	r.MessageType = "0"
 	r.Environment = "2"
 	r.Message = `{"aps":{"alert":"来自腾讯信鸽的提醒"}}`
