@@ -137,6 +137,9 @@ func Params(m0 map[string]interface{}) (m map[string]string) {
 			if v != 0 {
 				m[k] = strconv.FormatInt(int64(v.(int)), 10)
 			}
+		case reflect.Array, reflect.Slice:
+			b, _ := json.Marshal(val.Interface())
+			m[k] = string(b)
 		default:
 			panic(fmt.Sprintf("unsupported type: %T", v))
 		}
