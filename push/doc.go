@@ -1,5 +1,5 @@
 /*
-Package push provides several pay services API access.
+Package push provides several push services API access.
 
 Example (iOS only):
 	r := xg.SingleDeviceReq{}
