@@ -57,11 +57,12 @@ type SmsReq struct {
 
 // DefaultSmsReq ...
 func DefaultSmsReq() *SmsReq {
+	localLoc, _ := time.LoadLocation("Asia/Chongqing")
 	req := Req{
 		Format:     "json",
 		Method:     "alibaba.aliqin.fc.sms.num.send",
 		SignMethod: "md5",
-		Timestamp:  time.Now().UTC().Add(time.Duration(8 * time.Hour)).Format("2006-01-02 15:04:05"),
+		Timestamp:  time.Now().In(localLoc).Format("2006-01-02 15:04:05"),
 		Version:    "2.0",
 		PartnerID:  "apidoc",
 	}
