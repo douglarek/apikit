@@ -3,8 +3,8 @@ package xg
 import (
 	"bytes"
 	"crypto/md5"
+	"encoding/hex"
 	"encoding/json"
-	"fmt"
 	"io"
 	"net/http"
 	"net/url"
@@ -58,7 +58,8 @@ func params(prefix, secret string, m map[string]string) []byte {
 func sign(s interface{}, prefix, secret string) string {
 	m := bronx.Params(structs.Map(s))
 	b := params(prefix, secret, m)
-	return fmt.Sprintf("%x", md5.Sum(b))
+	sum := md5.Sum(b)
+	return hex.EncodeToString(sum[:])
 }
 
 // Resp ...
