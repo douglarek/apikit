@@ -34,25 +34,25 @@ func New(httpClient *http.Client, contentType ...string) *Alidayu {
 
 // Req ...
 type Req struct {
-	Method     string `json:"method,omitempty" url:"method" structs:"method"`
-	AppKey     string `json:"app_key,omitempty" url:"app_key" structs:"app_key"`
-	Timestamp  string `json:"timestamp,omitempty" url:"timestamp" structs:"timestamp"`
-	Format     string `json:"format,omitempty" url:"format" structs:"format"`
-	Version    string `json:"v,omitempty" url:"v" structs:"v"`
-	PartnerID  string `json:"partner_id,omitempty" url:"partner_id" structs:"partner_id"`
-	SignMethod string `json:"sign_method,omitempty" url:"sign_method" structs:"sign_method"`
-	Sign       string `json:"sign,omitempty" url:"sign" structs:"sign"`
+	Method     string `json:"method,omitempty" structs:"method"`
+	AppKey     string `json:"app_key,omitempty" structs:"app_key"`
+	Timestamp  string `json:"timestamp,omitempty" structs:"timestamp"`
+	Format     string `json:"format,omitempty" structs:"format"`
+	Version    string `json:"v,omitempty" structs:"v"`
+	PartnerID  string `json:"partner_id,omitempty" structs:"partner_id"`
+	SignMethod string `json:"sign_method,omitempty" structs:"sign_method"`
+	Sign       string `json:"sign,omitempty" structs:"sign"`
 }
 
 // SmsReq ...
 type SmsReq struct {
 	Req
-	Extend          string `json:"extend,omitempty" url:"extend" structs:"extend"`
-	SmsType         string `json:"sms_type,omitempty" url:"sms_type" structs:"sms_type"`
-	SmsFreeSignName string `json:"sms_free_sign_name,omitempty" url:"sms_free_sign_name" structs:"sms_free_sign_name"`
-	SmsParam        string `json:"sms_param,omitempty" url:"sms_param" structs:"sms_param"`
-	RecNum          string `json:"rec_num,omitempty" url:"rec_num" structs:"rec_num"`
-	SmsTemplateCode string `json:"sms_template_code,omitempty" url:"sms_template_code" structs:"sms_template_code"`
+	Extend          string `json:"extend,omitempty" structs:"extend"`
+	SmsType         string `json:"sms_type,omitempty" structs:"sms_type"`
+	SmsFreeSignName string `json:"sms_free_sign_name,omitempty" structs:"sms_free_sign_name"`
+	SmsParam        string `json:"sms_param,omitempty" structs:"sms_param"`
+	RecNum          string `json:"rec_num,omitempty" structs:"rec_num"`
+	SmsTemplateCode string `json:"sms_template_code,omitempty" structs:"sms_template_code"`
 }
 
 // DefaultSmsReq ...
@@ -66,7 +66,7 @@ func DefaultSmsReq() *SmsReq {
 		Version:    "2.0",
 		PartnerID:  "apidoc",
 	}
-	return &SmsReq{Req: req, Extend: "123456"}
+	return &SmsReq{Req: req, Extend: "123456", SmsType: "normal"}
 }
 
 // Sign signs an Alidayu request struct.
