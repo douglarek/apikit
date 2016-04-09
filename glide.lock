@@ -1,10 +1,6 @@
-hash: 15542f71a94a10aa51e4d23b44de1e6ba5c7b80fec5000fcb7bacdb3a4db1e38
-updated: 2016-04-04T19:50:59.85264991+08:00
+hash: 7a10c053b6c90575b7471c7127e74222f0fcef55c7d6b53352a7b50688e58ff0
+updated: 2016-04-09T10:37:55.043733049+08:00
 imports:
 - name: github.com/fatih/structs
   version: 73c4e3dc02a78deaba8640d5f3a8c236ec1352bf
-- name: github.com/google/go-querystring
-  version: 6bb77fe6f42b85397288d4f6f67ac72f8f400ee7
-  subpackages:
-  - query
 devImports: []
