@@ -41,8 +41,8 @@ type Resp struct {
 
 // ChannelsReq ...
 type ChannelsReq struct {
-	Channels string `json:"channels"`
-	Prod     string `json:"prod"`
+	Channels []string `json:"channels"`
+	Prod     string   `json:"prod"`
 	Data     struct {
 		Alert string `json:"alert"`
 	} `json:"data"`
