@@ -27,6 +27,7 @@ const (
 type Client struct {
 	client      *http.Client
 	ContentType string
+	Header      map[string]string
 }
 
 // NewClient returns a new API client.
@@ -53,8 +54,7 @@ func (c *Client) NewRequest(method, urlStr string, body interface{}) (*http.Requ
 	switch c.ContentType {
 	case MediaJSON:
 		if body != nil {
-			var b []byte
-			err := json.Unmarshal(b, body)
+			b, err := json.Marshal(body)
 			if err != nil {
 				return nil, err
 			}
@@ -82,6 +82,11 @@ func (c *Client) NewRequest(method, urlStr string, body interface{}) (*http.Requ
 	req, err := http.NewRequest(method, u.String(), buf)
 	if err != nil {
 		return nil, err
+	}
+	if len(c.Header) != 0 {
+		for k, v := range c.Header {
+			req.Header.Add(k, v)
+		}
 	}
 	req.Header.Add("Content-Type", c.ContentType)
 	return req, nil
