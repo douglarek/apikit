@@ -48,6 +48,10 @@ func (c *Client) SetHeader(h H) {
 	}
 }
 
+func (c *Client) AddHeader(key, val string) {
+	c.header[key] = val
+}
+
 // NewRequest creates an API request.
 func (c *Client) NewRequest(method, urlStr string, body interface{}) (*http.Request, error) {
 	u, err := url.Parse(urlStr)
@@ -57,7 +61,7 @@ func (c *Client) NewRequest(method, urlStr string, body interface{}) (*http.Requ
 
 	var buf io.Reader
 
-	switch c.header["Content-Type"] {
+	switch ct := c.header["Content-Type"]; ct {
 	case MediaJSON:
 		if body != nil {
 			b, err := json.Marshal(body)
@@ -72,6 +76,7 @@ func (c *Client) NewRequest(method, urlStr string, body interface{}) (*http.Requ
 			v.Set(k, val)
 		}
 		buf = strings.NewReader(v.Encode())
+		c.AddHeader("Content-Type", MediaForm)
 	case MediaXML:
 		if body != nil {
 			var b []byte
