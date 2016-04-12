@@ -73,3 +73,24 @@ func (lc *LeanCloud) PushChannels(r *ChannelsReq) (*Resp, error) {
 	return res, nil
 
 }
+
+// ChannelsOpsReq ...
+type ChannelsOpsReq struct {
+	Channels struct {
+		OP      string   `json:"__op"`
+		Objects []string `json:"objects"`
+	} `json:"channels"`
+}
+
+// UnsubscribeChannel ...
+func (lc *LeanCloud) UnsubscribeChannel(objectID string, c *ChannelsOpsReq) (*Resp, error) {
+	req, err := lc.client.NewRequest("PUT", installationURL+"/"+objectID, c)
+	if err != nil {
+		return nil, err
+	}
+	res := new(Resp)
+	if _, err := lc.client.Do(req, res); err != nil {
+		return nil, err
+	}
+	return res, nil
+}
