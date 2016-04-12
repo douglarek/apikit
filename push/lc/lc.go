@@ -40,11 +40,9 @@ type Resp struct {
 
 // ChannelsReq ...
 type ChannelsReq struct {
-	Channels []string `json:"channels"`
-	Prod     string   `json:"prod"`
-	Data     struct {
-		Alert string `json:"alert"`
-	} `json:"data"`
+	Channels []string               `json:"channels"`
+	Prod     string                 `json:"prod"`
+	Data     map[string]interface{} `json:"data"`
 }
 
 // SaveInstallation ...
