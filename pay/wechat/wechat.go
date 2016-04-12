@@ -24,7 +24,8 @@ type Wechat struct {
 
 // New makes a wechat ...
 func New(httpClient *http.Client) *Wechat {
-	c := bronx.NewClient(httpClient, bronx.MediaXML)
+	c := bronx.NewClient(httpClient)
+	c.SetHeader(bronx.H{"Content-Type": bronx.MediaXML})
 	return &Wechat{client: c}
 }
 

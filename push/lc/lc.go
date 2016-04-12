@@ -1,7 +1,6 @@
 package lc
 
 import (
-	"net/http"
 	"time"
 
 	"github.com/douglarek/bronx"
@@ -19,8 +18,8 @@ type LeanCloud struct {
 
 // New makes a LeanCloud ...
 func New(lcID, lcKey string) *LeanCloud {
-	c := bronx.NewClient(http.DefaultClient, bronx.MediaJSON)
-	c.Header = map[string]string{"X-LC-Id": lcID, "X-LC-Key": lcKey}
+	c := bronx.NewClient(nil)
+	c.SetHeader(bronx.H{"X-LC-Id": lcID, "X-LC-Key": lcKey, "Content-Type": bronx.MediaJSON})
 	return &LeanCloud{client: c}
 }
 

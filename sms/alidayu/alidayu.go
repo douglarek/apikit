@@ -27,8 +27,8 @@ type Alidayu struct {
 }
 
 // New ...
-func New(httpClient *http.Client, contentType ...string) *Alidayu {
-	c := bronx.NewClient(httpClient, contentType...)
+func New(httpClient *http.Client) *Alidayu {
+	c := bronx.NewClient(httpClient)
 	return &Alidayu{client: c}
 }
 

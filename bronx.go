@@ -25,21 +25,27 @@ const (
 
 // A Client manages communication with API.
 type Client struct {
-	client      *http.Client
-	ContentType string
-	Header      map[string]string
+	client *http.Client
+	header map[string]string
 }
 
+// H is a map shortcut.
+type H map[string]string
+
 // NewClient returns a new API client.
-func NewClient(httpClient *http.Client, contentType ...string) *Client {
+func NewClient(httpClient *http.Client) *Client {
 	if httpClient == nil {
 		httpClient = http.DefaultClient
 	}
-	c := &Client{client: httpClient}
-	if len(contentType) > 0 {
-		c.ContentType = contentType[0]
-	}
+	c := &Client{client: httpClient, header: H{}}
 	return c
+}
+
+// SetHeader ...
+func (c *Client) SetHeader(h H) {
+	for k, v := range h {
+		c.header[k] = v
+	}
 }
 
 // NewRequest creates an API request.
@@ -51,7 +57,7 @@ func (c *Client) NewRequest(method, urlStr string, body interface{}) (*http.Requ
 
 	var buf io.Reader
 
-	switch c.ContentType {
+	switch c.header["Content-Type"] {
 	case MediaJSON:
 		if body != nil {
 			b, err := json.Marshal(body)
@@ -66,7 +72,6 @@ func (c *Client) NewRequest(method, urlStr string, body interface{}) (*http.Requ
 			v.Set(k, val)
 		}
 		buf = strings.NewReader(v.Encode())
-		c.ContentType = MediaForm
 	case MediaXML:
 		if body != nil {
 			var b []byte
@@ -83,12 +88,11 @@ func (c *Client) NewRequest(method, urlStr string, body interface{}) (*http.Requ
 	if err != nil {
 		return nil, err
 	}
-	if len(c.Header) != 0 {
-		for k, v := range c.Header {
+	if len(c.header) != 0 {
+		for k, v := range c.header {
 			req.Header.Add(k, v)
 		}
 	}
-	req.Header.Add("Content-Type", c.ContentType)
 	return req, nil
 }
 
