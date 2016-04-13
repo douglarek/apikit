@@ -61,7 +61,6 @@ func DefaultOrderReq() *OrderReq {
 		AccessType:   "0",
 		TxnTime:      time.Now().UTC().Add(8 * time.Hour).Format("20060102150405"),
 		AccType:      "01",
-		TxnAmt:       "1",
 		CurrencyCode: "156",
 		ReqReserved:  "{}",
 	}
