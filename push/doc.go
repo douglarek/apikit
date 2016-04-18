@@ -22,5 +22,13 @@ Example (iOS only):
 	r.Message = `{"aps":{"alert":"来自腾讯信鸽的提醒"}}`
 	r.DeviceList = []string{""}
 	xg.MultiPush(&r, "")
+
+	s := lc.New("", "")
+	r := lc.InstallationReq{}
+	r.DeviceType = ""
+	r.DeviceToken = ""
+	r.InstallationID = ""
+	r.Channels = []string{"all"}
+	s.SaveInstallation(&r)
 */
 package push
