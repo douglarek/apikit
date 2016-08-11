@@ -18,7 +18,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/douglarek/bronx"
+	"github.com/douglarek/apikit"
 	"github.com/fatih/structs"
 )
 
@@ -68,7 +68,7 @@ func DefaultOrderReq() *OrderReq {
 }
 
 func params(s interface{}) []byte {
-	m := bronx.Params(structs.Map(s))
+	m := apikit.Params(structs.Map(s))
 	delete(m, "signature")
 	keys := make([]string, 0, len(m))
 	for k := range m {
@@ -116,7 +116,7 @@ type OrderResp struct {
 // AppConsume ...
 func AppConsume(r *OrderReq) (oresp *OrderResp) {
 	u := url.Values{}
-	for k, v := range bronx.Params(structs.Map(r)) {
+	for k, v := range apikit.Params(structs.Map(r)) {
 		u.Set(k, v)
 	}
 	resp, err := http.PostForm(appTransReqURL, u)

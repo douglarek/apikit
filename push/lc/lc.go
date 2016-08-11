@@ -3,7 +3,7 @@ package lc
 import (
 	"time"
 
-	"github.com/douglarek/bronx"
+	"github.com/douglarek/apikit"
 )
 
 const (
@@ -13,13 +13,13 @@ const (
 
 // LeanCloud ...
 type LeanCloud struct {
-	client *bronx.Client
+	client *apikit.Client
 }
 
 // New makes a LeanCloud ...
 func New(lcID, lcKey string) *LeanCloud {
-	c := bronx.NewClient(nil)
-	c.SetHeader(bronx.H{"X-LC-Id": lcID, "X-LC-Key": lcKey, "Content-Type": bronx.MediaJSON})
+	c := apikit.NewClient(nil)
+	c.SetHeader(apikit.H{"X-LC-Id": lcID, "X-LC-Key": lcKey, "Content-Type": apikit.MediaJSON})
 	return &LeanCloud{client: c}
 }
 

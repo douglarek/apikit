@@ -11,7 +11,7 @@ import (
 	"path"
 	"sort"
 
-	"github.com/douglarek/bronx"
+	"github.com/douglarek/apikit"
 	"github.com/fatih/structs"
 )
 
@@ -56,7 +56,7 @@ func params(prefix, secret string, m map[string]string) []byte {
 }
 
 func sign(s interface{}, prefix, secret string) string {
-	m := bronx.Params(structs.Map(s))
+	m := apikit.Params(structs.Map(s))
 	b := params(prefix, secret, m)
 	sum := md5.Sum(b)
 	return hex.EncodeToString(sum[:])
@@ -85,7 +85,7 @@ func newURL(oldURL, suffix string) *url.URL {
 
 func values(s interface{}) url.Values {
 	v := url.Values{}
-	for k, val := range bronx.Params(structs.Map(s)) {
+	for k, val := range apikit.Params(structs.Map(s)) {
 		v.Set(k, val)
 	}
 	return v

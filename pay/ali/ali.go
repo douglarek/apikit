@@ -16,7 +16,7 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/douglarek/bronx"
+	"github.com/douglarek/apikit"
 	"github.com/fatih/structs"
 )
 
@@ -30,12 +30,12 @@ const (
 
 // Ali ...
 type Ali struct {
-	client *bronx.Client
+	client *apikit.Client
 }
 
 // New makes an ali ...
 func New(httpClient *http.Client) *Ali {
-	c := bronx.NewClient(httpClient)
+	c := apikit.NewClient(httpClient)
 	return &Ali{client: c}
 }
 
@@ -96,7 +96,7 @@ func removeKeys(m map[string]string, keys ...string) map[string]string {
 
 // Sign ...
 func (a *Ali) Sign(s interface{}, secretKey []byte) (b []byte) {
-	m := bronx.Params(structs.Map(s))
+	m := apikit.Params(structs.Map(s))
 	st := m["sign_type"]
 	buf := sortedParams(removeKeys(m, "sign", "sign_type"))
 	switch st {
@@ -146,7 +146,7 @@ func (a *Ali) Verify(publicKey, sign []byte, req *NotifyReq) error {
 		return err
 	}
 	h := crypto.Hash.New(crypto.SHA1)
-	m := bronx.Params(structs.Map(req))
+	m := apikit.Params(structs.Map(req))
 	b := sortedParams(removeKeys(m, "sign", "sign_type"))
 	h.Write(removeQuote(b.Bytes()))
 	sum := h.Sum(nil)
@@ -158,7 +158,7 @@ func (a *Ali) Verify(publicKey, sign []byte, req *NotifyReq) error {
 
 // EncodedQuery ...
 func (a *Ali) EncodedQuery(s interface{}) []byte {
-	m := bronx.Params(structs.Map(s))
+	m := apikit.Params(structs.Map(s))
 	m["sign"] = url.QueryEscape(m["sign"])
 	buf := sortedParams(m)
 	return buf.Bytes()
@@ -170,7 +170,7 @@ func (a *Ali) PayURL(s interface{}) string {
 	if err != nil {
 		panic(err)
 	}
-	m := bronx.Params(structs.Map(s))
+	m := apikit.Params(structs.Map(s))
 	p := url.Values{}
 	for k := range m {
 		p.Add(k, m[k])

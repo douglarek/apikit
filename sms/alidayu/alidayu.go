@@ -9,7 +9,7 @@ import (
 	"sort"
 	"time"
 
-	"github.com/douglarek/bronx"
+	"github.com/douglarek/apikit"
 	"github.com/fatih/structs"
 )
 
@@ -23,12 +23,12 @@ const (
 
 // Alidayu handles communication with related methods of the Alidayu API.
 type Alidayu struct {
-	client *bronx.Client
+	client *apikit.Client
 }
 
 // New ...
 func New(httpClient *http.Client) *Alidayu {
-	c := bronx.NewClient(httpClient)
+	c := apikit.NewClient(httpClient)
 	return &Alidayu{client: c}
 }
 
@@ -71,7 +71,7 @@ func DefaultSmsReq() *SmsReq {
 
 // Sign signs an Alidayu request struct.
 func (a *Alidayu) Sign(s interface{}, secret, method string) string {
-	m := bronx.Params(structs.Map(s))
+	m := apikit.Params(structs.Map(s))
 	delete(m, "sign")
 	keys := make([]string, 0, len(m))
 	for k := range m {

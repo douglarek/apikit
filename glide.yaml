@@ -1,3 +1,3 @@
-package: github.com/douglarek/bronx
+package: github.com/douglarek/apikit
 import:
 - package: github.com/fatih/structs

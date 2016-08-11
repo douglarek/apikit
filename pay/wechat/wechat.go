@@ -8,7 +8,7 @@ import (
 	"net/http"
 	"sort"
 
-	"github.com/douglarek/bronx"
+	"github.com/douglarek/apikit"
 	"github.com/fatih/structs"
 )
 
@@ -19,13 +19,13 @@ const (
 
 // Wechat ...
 type Wechat struct {
-	client *bronx.Client
+	client *apikit.Client
 }
 
 // New makes a wechat ...
 func New(httpClient *http.Client) *Wechat {
-	c := bronx.NewClient(httpClient)
-	c.SetHeader(bronx.H{"Content-Type": bronx.MediaXML})
+	c := apikit.NewClient(httpClient)
+	c.SetHeader(apikit.H{"Content-Type": apikit.MediaXML})
 	return &Wechat{client: c}
 }
 
@@ -133,7 +133,7 @@ type AppReq struct {
 
 // Sign ...
 func (w *Wechat) Sign(s interface{}, secret string) string {
-	m := bronx.Params(structs.Map(s))
+	m := apikit.Params(structs.Map(s))
 	delete(m, "sign")
 	keys := make([]string, 0, len(m))
 	for k := range m {
