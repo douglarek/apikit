@@ -2,7 +2,6 @@ package alidayu
 
 import (
 	"bytes"
-	"crypto/hmac"
 	"crypto/md5"
 	"fmt"
 	"net/http"
@@ -14,12 +13,6 @@ import (
 )
 
 const url = "https://eco.taobao.com/router/rest"
-
-//
-const (
-	HMAC = "hmac"
-	MD5  = "md5"
-)
 
 // Alidayu handles communication with related methods of the Alidayu API.
 type Alidayu struct {
@@ -70,7 +63,7 @@ func DefaultSmsReq() *SmsReq {
 }
 
 // Sign signs an Alidayu request struct.
-func (a *Alidayu) Sign(s interface{}, secret, method string) string {
+func (a *Alidayu) Sign(s interface{}, secret []byte) string {
 	m := apikit.Params(structs.Map(s))
 	delete(m, "sign")
 	keys := make([]string, 0, len(m))
@@ -85,26 +78,15 @@ func (a *Alidayu) Sign(s interface{}, secret, method string) string {
 		buf.WriteString(m[k])
 	}
 
-	return encrypt(buf.Bytes(), []byte(secret), method)
+	return encrypt(buf.Bytes(), secret)
 }
 
-func encrypt(s, secret []byte, method string) (h string) {
-	switch method {
-	case MD5:
-		d := make([]byte, 0, len(s)+2*len(secret))
-		d = append(d, secret...)
-		d = append(d, s...)
-		d = append(d, secret...)
-		h = fmt.Sprintf("%X", md5.Sum(d))
-	case HMAC:
-		// TODO:
-		mac := hmac.New(md5.New, secret)
-		mac.Write(s)
-		h = fmt.Sprintf("%X", mac.Sum(nil))
-	default:
-		panic("unsupported sign method!")
-	}
-	return h
+func encrypt(s, secret []byte) (h string) {
+	d := make([]byte, 0, len(s)+2*len(secret))
+	d = append(d, secret...)
+	d = append(d, s...)
+	d = append(d, secret...)
+	return fmt.Sprintf("%X", md5.Sum(d))
 }
 
 // Resp ...
