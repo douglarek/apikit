@@ -41,13 +41,14 @@ func NewClient(httpClient *http.Client) *Client {
 	return c
 }
 
-// SetHeader ...
+// SetHeader sets a header.
 func (c *Client) SetHeader(h H) {
 	for k, v := range h {
 		c.header[k] = v
 	}
 }
 
+// AddHeader adds a header mapping.
 func (c *Client) AddHeader(key, val string) {
 	c.header[key] = val
 }
