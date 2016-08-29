@@ -1,3 +1,4 @@
 package: github.com/douglarek/apikit
 import:
 - package: github.com/fatih/structs
+- package: github.com/bitly/go-simplejson
