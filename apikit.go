@@ -12,6 +12,7 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/fatih/structs"
 )
@@ -35,7 +36,7 @@ type H map[string]string
 // NewClient returns a new API client.
 func NewClient(httpClient *http.Client) *Client {
 	if httpClient == nil {
-		httpClient = http.DefaultClient
+		httpClient = &http.Client{Timeout: 10 * time.Second}
 	}
 	c := &Client{client: httpClient, header: H{}}
 	return c
