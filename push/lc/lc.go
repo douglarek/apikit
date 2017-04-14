@@ -43,6 +43,7 @@ type ChannelsReq struct {
 	Channels []string               `json:"channels"`
 	Prod     string                 `json:"prod"`
 	Data     map[string]interface{} `json:"data"`
+	Where    map[string]interface{} `json:"where"`
 }
 
 // SaveInstallation ...
