@@ -1,0 +1,19 @@
+memo = "895a2a08e2d0ae599439237ecf7a9c87ed98a947237157942475e7b701d82e85"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/bitly/go-simplejson"
+  packages = ["."]
+  revision = "da1a8928f709389522c8023062a3739f3b4af419"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/fatih/structs"
+  packages = ["."]
+  revision = "a720dfa8df582c51dee1b36feabb906bde1588bd"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/imdario/mergo"
+  packages = ["."]
+  revision = "d806ba8c21777d504a2090a2ca4913c750dd3a33"
