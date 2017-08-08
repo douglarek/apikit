@@ -120,6 +120,9 @@ func AppConsume(r *OrderReq) (oresp *OrderResp) {
 		u.Set(k, v)
 	}
 	resp, err := http.PostForm(appTransReqURL, u)
+	if err != nil {
+		return
+	}
 	defer resp.Body.Close()
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
@@ -159,7 +162,7 @@ type NotifyReq struct {
 	PayType            string `structs:"payType" json:"payType"`
 	AccNo              string `structs:"accNo" json:"accNo"`
 	PayCardType        string `structs:"payCardType" json:"payCardType"`
-	Reserved           string `structs:"reserved"json:"reserved"`
+	Reserved           string `structs:"reserved" json:"reserved"`
 	QueryID            string `structs:"queryId" json:"queryId"`
 	TraceNo            string `structs:"traceNo" json:"traceNo"`
 	TraceTime          string `structs:"traceTime" json:"traceTime"`
